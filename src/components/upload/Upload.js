@@ -1,12 +1,13 @@
 import React from "react"
-import Button from '@material-ui/core/Button'
-import {TextField} from "@material-ui/core";
 import firebase from 'firebase'
 import "./index.css"
+
 import Typography from "@material-ui/core/Typography";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
+import Button from '@material-ui/core/Button'
+import {TextField} from "@material-ui/core";
 
 class Upload extends React.Component{
     constructor(props) {
@@ -16,7 +17,8 @@ class Upload extends React.Component{
             file:[],
             image_url:"",
             uploadPercent:0.0,
-            showSnack:false
+            showSnack:false,
+            snackText:""
         };
 
         this.storageRef=firebase.storage().ref();
@@ -28,8 +30,8 @@ class Upload extends React.Component{
         this.addNewPost=this.addNewPost.bind(this);
         this.doneUpload=this.doneUpload.bind(this);
         this.updateUploadPercent=this.updateUploadPercent.bind(this)
+        this.showSnack=this.showSnack.bind(this)
         this.closeSnack=this.closeSnack.bind(this);
-
     }
 
     render() {
@@ -43,8 +45,9 @@ class Upload extends React.Component{
                     placeholder="Write Something ...."
                     fullWidth="true"
                     multiline="true"
-                    onKeyPress={this.textInputChange}
-                />
+                    value={this.state.text}
+                    onChange={this.textInputChange}>
+                </TextField>
                 <img style={{width:"200px"}} src={this.state.image_url}/>
 
                 <div>
@@ -72,7 +75,7 @@ class Upload extends React.Component{
                     onClose={this.closeSnack}>
                     <SnackbarContent
                         style={{background:"#606060",fontSize:"17px"}}
-                        message={<span id="message-id">status uploaded!!</span>}/>
+                        message={<span id="message-id">{this.state.snackText}</span>}/>
                 </Snackbar>
             </div>
         )
@@ -88,29 +91,17 @@ class Upload extends React.Component{
             //
             if(postText && imageFile){
                 //upload the image
+                this.showSnack("Upload starting...")
                 this.uploadPost(imageKey,postText,imageFile,this.doneUpload,this.updateUploadPercent)
             }else {
                 console.log("write something")
-
+                this.showSnack("write something")
             }
         })
     }
 
-    doneUpload(){
-        console.log("done uploading")
-        this.setState({
-            text:"",
-            file:[],
-            image_url:"",
-            uploadPercent:0.0,
-            showSnack:true
-        })
 
 
-    }
-    updateUploadPercent(percent){
-        this.setState({uploadPercent:percent})
-    }
 
     uploadPost(imageName, text, file,doneUpload,uploadPercent){
         let uploadTask = this.storageRef.child(imageName).put(this.state.file[0]);
@@ -151,10 +142,7 @@ class Upload extends React.Component{
 
     }
 
-    textInputChange(event){
-        const text=event.target.value
-        this.setState({text:text})
-    }
+
     fileChange(file){
         console.log("file:",file[0])
         this.setState({file:file})
@@ -177,6 +165,35 @@ class Upload extends React.Component{
                 image_url: ""
             })
         }
+    }
+
+    textInputChange(event){
+        const text=event.target.value
+        this.setState({text:text})
+    }
+
+    updateUploadPercent(percent){
+        this.setState({uploadPercent:percent})
+    }
+
+    doneUpload(){
+        console.log("done uploading")
+        this.setState({
+            text:"",
+            file:[],
+            image_url:"",
+            uploadPercent:0.0
+        })
+        this.showSnack("Status Uploaded!!")
+
+    }
+
+    showSnack(text){
+        console.log("snack",text)
+        this.setState({
+            showSnack:true,
+            snackText:text
+        })
     }
 
     closeSnack(){

@@ -13,7 +13,11 @@ class Feed extends React.Component{
             content_list:[],
             loading:true
         };
-        this.database_ref=firebase.database().ref('feed');
+        if(props.location){
+            this.database_ref=firebase.database().ref(props.location);
+        }else {
+            this.database_ref=firebase.database().ref('feed');
+        }
         this.getData=this.getData.bind(this)
 
     }
@@ -21,7 +25,7 @@ class Feed extends React.Component{
     render() {
         return(<div >
             {this.state.loading ?
-                <div style={{textAlign:"center"}}>
+                <div style={{textAlign:"center",marginTop:"100px"}}>
                     <CircularProgress/>
                 </div>:
                 <div/>
