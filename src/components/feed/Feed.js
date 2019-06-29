@@ -37,6 +37,7 @@ class Feed extends React.Component{
                               time_stamp={snapshot.val().time_stamp}
                               child_key={snapshot.key}
                               show={this.props.show}
+                              profile={snapshot.val().post_owner}
                     />
                 )
             })}

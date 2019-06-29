@@ -16,13 +16,19 @@ class PostItem extends React.Component{
         this.state={
             image_url:"/",
             time:"",
-            show:false
+            show:false,
+            profileImage:null,
+            profileName:null
+
         };
 
+        this.database_ref=firebase.database().ref("/users/"+props.profile);
         this.storeRef=firebase.storage().ref();
         this.performLike=this.performLike.bind(this);
         this.loadImage=this.loadImage.bind(this);
         this.viewImage=this.viewImage.bind(this);
+        this.getData=this.getData.bind(this)
+        console.log("owner",props.profile)
     }
 
     render() {
@@ -32,14 +38,17 @@ class PostItem extends React.Component{
                     {/*<img className="image_view" src={this.state.image_url} style={{width:"100%",background:"black"}} alt="image"/>*/}
                     <CardMedia image={this.state.image_url} style = {{ height: "100%", paddingTop: '100%',width:"100%",}} />
                     <div  style={{padding:"13px"}}>
+                        <h1>{this.state.name & this.state.name}</h1>
                         <CardHeader
 
                             avatar={
-                                <Avatar src={avatarIcon}/>
+                                <Avatar src={this.state.profileImage?this.state.profileImage:avatarIcon}/>
                             }
+
                             title={this.props.text}
                             subheader={this.state.time}>
                         </CardHeader>
+                        <img style={{width:"100px"}} src={this.state.profileImage?this.state.profileImage:avatarIcon}/>
                     </div>
                 </div>
                 <Dialog
@@ -62,12 +71,29 @@ class PostItem extends React.Component{
     }
 
     componentDidMount() {
+        this.database_ref.on("value",this.getData)
+
+
         this.loadImage()
         let date = new Date(this.props.time_stamp)
         let localTime = date.getHours()+":"+date.getMinutes()+" "+ date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
         this.setState({
             time: localTime
         })
+    }
+    getData(snapshot){
+
+        if(snapshot.val()){
+            console.log("profileImage",snapshot.val().profilePicture)
+            console.log("name", snapshot.val().name)
+            this.setState({
+                profileImage:snapshot.val().profilePicture ? snapshot.val().profilePicture:null,
+                profileName:snapshot.val().name ? snapshot.val().name:null
+            })
+        }else {
+            console.log("snapshot is null",snapshot.val())
+        }
+
     }
 
     loadImage(){

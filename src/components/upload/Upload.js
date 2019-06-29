@@ -100,9 +100,6 @@ class Upload extends React.Component{
         })
     }
 
-
-
-
     uploadPost(imageName, text, file,doneUpload,uploadPercent){
         let uploadTask = this.storageRef.child(imageName).put(this.state.file[0]);
 
@@ -134,12 +131,13 @@ class Upload extends React.Component{
                 };
                 firebase.database().ref("/feed").push().set(value).then(()=>{
 
-                    doneUpload()
+                    firebase.database().ref("/users/"+firebase.auth().currentUser.uid+"/posts/").push().set(value).then(()=>{
+                        doneUpload()
+                    })
                 })
 
             });
         });
-
     }
 
 

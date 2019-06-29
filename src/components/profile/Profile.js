@@ -1,66 +1,93 @@
 import React from "react"
 import "./index.css"
 import firebase from "../../fire";
-import {CssBaseline} from "@material-ui/core";
-import GridList from "@material-ui/core/GridList";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import avaterIcon from "../../resources/avaterIcon.png"
 import Feed from "../feed/Feed";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Dialog from "@material-ui/core/Dialog";
 
 class Profile extends React.Component{
     constructor(props) {
         super(props);
         this.state={
-            name:"Loading...",
-            email:"Loading...",
-            image:null
+            name:"",
+            email:"",
+            profilePicture:null,
+            dialog:false,
+            file:[]
         };
-        // console.log("my props",this.props.match.params.id)
-        this.profileRef=firebase.database().ref('users/'+this.props.match.params.id);
+        this.storageRef=firebase.storage().ref();
+        this.profileRef=firebase.database().ref('users/'+firebase.auth().currentUser.uid);
         this.getData=this.getData.bind(this)
+        this.handleDialog=this.handleDialog.bind(this)
+        this.uploadProfilePicture=this.uploadProfilePicture.bind(this);
+        this.fileChange=this.fileChange.bind(this);
+        this.addNewPost=this.addNewPost.bind(this);
+        this.doneUpload=this.doneUpload.bind(this)
     }
+
+
     render() {
-        return(
-            <div  style={{textAlign:"center",
-                left:"0",
-                right:"0",
-                margin:"auto",
-                width:"70%"
-            }}>
+       return(
+           <div>
+               <br/><br/><br/><br/>
+               <Grid container
+                     style={{
+                         left:"0",
+                         right:"0",
+                         margin:"auto",
+                         width:"80%"}}>
+                   <Grid item xs={5} >
+                       <div style={{position:"fixed",transform:"none"}}>
+                           <CardMedia onClick={this.props.match.params.id?null:this.handleDialog} image={this.state.profilePicture?this.state.profilePicture:avaterIcon}
+                                      width="100%"  style = {{ height: "100%", paddingTop: '100%',width:"100%",borderRadius:"50%"}} />
+                           <Typography variant="h4">{this.state.name}</Typography>
+                           <Typography variant="subtitle2">{this.state.email}</Typography>
+                           <Typography variant="h6">This is my bio</Typography>
+                       </div>
+                   </Grid>
+                   <Grid item xs={6}>
+                       <Typography variant="h5">All post</Typography>
+                       <Feed location={"/users/"+firebase.auth().currentUser.uid+"/posts/"}/>
+                   </Grid>
 
-                <CssBaseline/>
-                <div>
-                    <GridList
-                        cellHeight="100%"
-                        cols={2}>
-                        <Grid>
-                            <br/>
-                            <br/>
-                            <br/>
-                            <div style={{margin:"27px",position:"fixed",width:"30%"}}>
-                                <Card elevation={0} >
-                                    <CardMedia image={avaterIcon} width="100%"  style = {{ height: "100%", paddingTop: '100%',width:"100%",borderRadius:"50%"}} />
-                                </Card>
-                                <Typography variant="h3">{this.state.name}</Typography>
-                                <Typography variant="subtitle2">{this.state.email}</Typography>
-                                <Typography variant="h6">This is my bio</Typography>
-
-                            </div>
-
-                        </Grid>
-                        <Grid>
-                            <br/>
-                            <br/>
-                            <Feed/>
-                        </Grid>
-                    </GridList>
-                </div>
-
-            </div>
-        )
+               </Grid>
+               <Dialog
+                   open={this.state.dialog} onClose={this.handleDialog}>
+                   <DialogTitle>Update profile picture</DialogTitle>
+                   <DialogContent>
+                       {/*<Button variant="contained" onClick={this.uploadProfilePicture}>yes</Button>*/}
+                       <div>
+                           <input
+                               accept="image/*"
+                               style={{display:'none'}}
+                               id="contained-button-file"
+                               multiple
+                               type="file"
+                               onChange={ (e) => this.fileChange(e.target.files) }
+                           />
+                           <label htmlFor="contained-button-file">
+                               <Button  variant="outlined" component="span">
+                                   yes
+                               </Button>
+                           </label>
+                           <Button  variant="outlined" component="span"  onClick={this.addNewPost}>
+                               Post
+                           </Button>
+                           <Button variant="text" onClick={this.handleDialog}>cancel</Button>
+                       </div>
+                       <CssBaseline/>
+                   </DialogContent>
+               </Dialog>
+           </div>
+       )
     }
 
     componentDidMount() {
@@ -70,7 +97,8 @@ class Profile extends React.Component{
         if(this.props.match.params.id){
             this.setState({
                 name:snapshot.val().name,
-                email:snapshot.val().email
+                email:snapshot.val().email,
+                profilePicture:snapshot.val().profilePicture
             })
         }else {
             this.setState({
@@ -78,7 +106,97 @@ class Profile extends React.Component{
                 email:"your email"
             })
         }
+    }
 
+
+    fileChange(file){
+        console.log("file:",file[0])
+        this.setState({file:file})
+
+        const reader  = new FileReader();
+
+        reader.onloadend = () => {
+            this.setState({
+                image_url: reader.result
+            })
+        }
+        if (file[0]) {
+            reader.readAsDataURL(file[0]);
+            this.setState({
+                image_url :reader.result
+            })
+        }
+        else {
+            this.setState({
+                image_url: ""
+            })
+        }
+    }
+    addNewPost(){
+        console.log("in the add new")
+        if(this.state.file[0]){
+            let imageKey=firebase.auth().currentUser.uid
+            let imageFile=this.state.file[0];
+            this.uploadPicture(imageKey,imageFile,this.doneUpload,this.updateUploadPercent)
+
+        }
+    }
+    uploadPicture(imageName, file,doneUpload,uploadPercent){
+
+        let uploadTask = this.storageRef.child(imageName).put(this.state.file[0]);
+        console.log("started")
+        uploadTask.on('state_changed', function(snapshot){
+            let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            uploadPercent(progress)
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                    console.log('Upload is running');
+                    break;
+
+            }
+        }, function(error) {
+            console.log("error",error);
+            doneUpload(null)
+        }, function() {
+
+            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                doneUpload(downloadURL)
+                console.log(downloadURL)
+            });
+        });
+    }
+
+
+    updateUploadPercent(percent){
+        // this.setState({uploadPercent:percent})
+
+    }
+
+    doneUpload(url){
+        if(url){
+            this.profileRef.child("profilePicture").set(url)
+        }
+        // this.setState({
+        //     file:[],
+        //     image_url:"",
+        //     uploadPercent:0.0
+        // })
+        // this.showSnack("Status Uploaded!!")
+
+    }
+    uploadProfilePicture(){
+
+
+    }
+
+
+
+    handleDialog(){
+        this.setState({dialog:!this.state.dialog})
     }
 }
 export default Profile

@@ -1,5 +1,7 @@
-.myDiv{
+.profile{
+    width: 100%;
+    left:0;
+    right:0;
     margin: auto;
-    text-align: center;
-    padding: 100px;
 }
+
