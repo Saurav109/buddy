@@ -1,5 +1,4 @@
 import React from "react"
-// import firebase from "firebase"
 import firebase from "../../fire"
 import PostItem from "./PostItem"
 import "./index.css"
@@ -41,6 +40,7 @@ class Feed extends React.Component{
                     />
                 )
             })}
+
         </div>)
     }
 

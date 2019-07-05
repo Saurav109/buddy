@@ -42,7 +42,7 @@ class Nav extends React.Component{
                 <AppBar color="white" position="fixed">
                     <Toolbar >
                         <Typography className="type" variant="button" ><Link to="/home">Home</Link></Typography>
-                        <Typography className="type" variant="button" ><Link to={"/profile/"+this.state.user}>Profile</Link></Typography>
+                        <Typography className="type" variant="button" ><Link to={"/profile"}>Profile</Link></Typography>
                         <Typography className="type" variant="button" ><Link to="/inbox">Inbox</Link></Typography>
                         <Typography style={{left:"0"}} className="type" variant="button" onClick={this.handleMenuClick}>Menu</Typography>
 

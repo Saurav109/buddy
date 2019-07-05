@@ -8,10 +8,10 @@ import avaterIcon from "../../resources/avaterIcon.png"
 import Feed from "../feed/Feed";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Dialog from "@material-ui/core/Dialog";
+import TextField from "@material-ui/core/TextField";
 
 class Profile extends React.Component{
     constructor(props) {
@@ -25,8 +25,8 @@ class Profile extends React.Component{
         };
         this.storageRef=firebase.storage().ref();
         this.profileRef=firebase.database().ref('users/'+firebase.auth().currentUser.uid);
-        this.getData=this.getData.bind(this)
-        this.handleDialog=this.handleDialog.bind(this)
+        this.getData=this.getData.bind(this);
+        this.handleDialog=this.handleDialog.bind(this);
         this.uploadProfilePicture=this.uploadProfilePicture.bind(this);
         this.fileChange=this.fileChange.bind(this);
         this.addNewPost=this.addNewPost.bind(this);
@@ -50,7 +50,7 @@ class Profile extends React.Component{
                                       width="100%"  style = {{ height: "100%", paddingTop: '100%',width:"100%",borderRadius:"50%"}} />
                            <Typography variant="h4">{this.state.name}</Typography>
                            <Typography variant="subtitle2">{this.state.email}</Typography>
-                           <Typography variant="h6">This is my bio</Typography>
+                           <TextField />
                        </div>
                    </Grid>
                    <Grid item xs={6}>
@@ -63,7 +63,6 @@ class Profile extends React.Component{
                    open={this.state.dialog} onClose={this.handleDialog}>
                    <DialogTitle>Update profile picture</DialogTitle>
                    <DialogContent>
-                       {/*<Button variant="contained" onClick={this.uploadProfilePicture}>yes</Button>*/}
                        <div>
                            <input
                                accept="image/*"
@@ -94,24 +93,29 @@ class Profile extends React.Component{
         this.profileRef.on("value",this.getData)
     }
     getData(snapshot){
-        if(this.props.match.params.id){
-            this.setState({
-                name:snapshot.val().name,
-                email:snapshot.val().email,
-                profilePicture:snapshot.val().profilePicture
-            })
-        }else {
-            this.setState({
-                name:"your name",
-                email:"your email"
-            })
-        }
+        this.setState({
+            name:snapshot.val().name,
+            email:snapshot.val().email,
+            profilePicture:snapshot.val().profilePicture
+        })
+        // if(this.props.match.params.id){
+        //     this.setState({
+        //         name:snapshot.val().name,
+        //         email:snapshot.val().email,
+        //         profilePicture:snapshot.val().profilePicture
+        //     })
+        // }else {
+        //     this.setState({
+        //         name:"your name",
+        //         email:"your email"
+        //     })
+        // }
     }
 
 
     fileChange(file){
-        console.log("file:",file[0])
-        this.setState({file:file})
+        console.log("file:",file[0]);
+        this.setState({file:file});
 
         const reader  = new FileReader();
 
@@ -119,7 +123,8 @@ class Profile extends React.Component{
             this.setState({
                 image_url: reader.result
             })
-        }
+        };
+
         if (file[0]) {
             reader.readAsDataURL(file[0]);
             this.setState({
@@ -133,9 +138,9 @@ class Profile extends React.Component{
         }
     }
     addNewPost(){
-        console.log("in the add new")
+        console.log("in the add new");
         if(this.state.file[0]){
-            let imageKey=firebase.auth().currentUser.uid
+            let imageKey=firebase.auth().currentUser.uid;
             let imageFile=this.state.file[0];
             this.uploadPicture(imageKey,imageFile,this.doneUpload,this.updateUploadPercent)
 
@@ -192,8 +197,6 @@ class Profile extends React.Component{
 
 
     }
-
-
 
     handleDialog(){
         this.setState({dialog:!this.state.dialog})

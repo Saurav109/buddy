@@ -35,29 +35,24 @@ class PostItem extends React.Component{
         return(
             <Card className="postItem" onClick={this.viewImage}>
                 <div >
-                    {/*<img className="image_view" src={this.state.image_url} style={{width:"100%",background:"black"}} alt="image"/>*/}
                     <CardMedia image={this.state.image_url} style = {{ height: "100%", paddingTop: '100%',width:"100%",}} />
                     <div  style={{padding:"13px"}}>
-                        <h1>{this.state.name & this.state.name}</h1>
                         <CardHeader
-
                             avatar={
                                 <Avatar src={this.state.profileImage?this.state.profileImage:avatarIcon}/>
                             }
-
                             title={this.props.text}
                             subheader={this.state.time}>
                         </CardHeader>
-                        <img style={{width:"100px"}} src={this.state.profileImage?this.state.profileImage:avatarIcon}/>
+                        {/*<img style={{width:"100px"}} src={this.state.profileImage?this.state.profileImage:avatarIcon}/>*/}
                     </div>
                 </div>
+
                 <Dialog
                     fullScreen="true"
                     open={this.state.show} onClose={this.viewImage}>
                     <img className="image_view" src={this.state.image_url}
-                         alt={this.state.image_url}
-                        // style={{height:"100%",width:"80%",backgroundSize:"auto"}}
-                    />
+                         alt={this.state.image_url}/>
                     <Button size="medium" variant="text" fullWidth="false" onClick={this.viewImage}>Close</Button>
                 </Dialog>
             </Card>
@@ -74,7 +69,7 @@ class PostItem extends React.Component{
         this.database_ref.on("value",this.getData)
 
 
-        this.loadImage()
+        this.loadImage();
         let date = new Date(this.props.time_stamp)
         let localTime = date.getHours()+":"+date.getMinutes()+" "+ date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear();
         this.setState({
@@ -97,7 +92,7 @@ class PostItem extends React.Component{
     }
 
     loadImage(){
-        let path=this.props.url
+        let path=this.props.url;
         console.log("ImageUrl",path);
 
         if(path){
