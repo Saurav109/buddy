@@ -3,8 +3,8 @@
 
 // This lets the app load faster on subsequent visits in production, and gives
 // it offline capabilities. However, it also means that developers (and users)
-// will only see deployed updates on subsequent visits to a pageState, after all the
-// existing tabs open on the pageState have been closed, since previously cached
+// will only see deployed updates on subsequent visits to a isLoggedIn, after all the
+// existing tabs open on the isLoggedIn have been closed, since previously cached
 // resources are updated in the background.
 
 // To learn more about the benefits of this model and instructions on how to
@@ -26,7 +26,7 @@ export function register(config) {
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
-      // from what our pageState is served on. This might happen if a CDN is used to
+      // from what our isLoggedIn is served on. This might happen if a CDN is used to
       // serve assets; see https://github.com/facebook/create-react-app/issues/2374
       return;
     }
@@ -71,7 +71,7 @@ function registerValidSW(swUrl, config) {
               // content until all client tabs are closed.
               console.log(
                 'New content is available and will be used when all ' +
-                  'tabs for this pageState are closed. See https://bit.ly/CRA-PWA.'
+                  'tabs for this isLoggedIn are closed. See https://bit.ly/CRA-PWA.'
               );
 
               // Execute callback
@@ -99,7 +99,7 @@ function registerValidSW(swUrl, config) {
 }
 
 function checkValidServiceWorker(swUrl, config) {
-  // Check if the service worker can be found. If it can't reload the pageState.
+  // Check if the service worker can be found. If it can't reload the isLoggedIn.
   fetch(swUrl)
     .then(response => {
       // Ensure service worker exists, and that we really are getting a JS file.
@@ -108,7 +108,7 @@ function checkValidServiceWorker(swUrl, config) {
         response.status === 404 ||
         (contentType != null && contentType.indexOf('javascript') === -1)
       ) {
-        // No service worker found. Probably a different app. Reload the pageState.
+        // No service worker found. Probably a different app. Reload the isLoggedIn.
         navigator.serviceWorker.ready.then(registration => {
           registration.unregister().then(() => {
             window.location.reload();

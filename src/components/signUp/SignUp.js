@@ -84,8 +84,7 @@ class SignUp extends React.Component{
 
         firebase.database().ref("users").child(user.uid).set(newUser).then(
             ()=>{
-
-                this.props.history.replace("/home");
+                this.props.history.push("/");
                 console.log("Done creating new profile!")
             }
         )

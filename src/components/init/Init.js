@@ -17,8 +17,7 @@ class Init extends React.Component{
             <Router>
                 <Nav/>
                 <Switch>
-                    <Route path= "/" component={Main} exact/>
-                    <Route path="/home" component={Home} exact/>
+                    <Route path= "/" component={Home} exact/>
                     <Route path="/inbox" component={Inbox} exact/>
                     <Route path="/profile/:id" component={Profile} exact/>
                     <Route path="/profile" component={Profile} exact/>
@@ -29,6 +28,5 @@ class Init extends React.Component{
             </Router>
         )
     }
-
 }
 export default Init

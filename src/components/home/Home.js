@@ -1,10 +1,9 @@
 import React from "react"
 import "./index.css"
-//
 import Feed from "../feed/Feed"
 import {Redirect} from 'react-router-dom'
 import firebase from "../../fire";
-import Upload from "../upload/Upload";
+import AddPost from "../addPost/addPost";
 
 
 class Home extends React.Component{
@@ -13,7 +12,7 @@ class Home extends React.Component{
         return(
             firebase.auth().currentUser!=null?
             <div>
-                <Upload/>
+                <AddPost/>
                 <Feed/>
             </div>:
             <div>
@@ -21,6 +20,6 @@ class Home extends React.Component{
             </div>
         )
     }
-
 }
+
 export default Home

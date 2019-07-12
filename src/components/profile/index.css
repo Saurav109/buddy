@@ -5,3 +5,35 @@
     margin: auto;
 }
 
+.profileView{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100px;
+    margin: auto;
+    width: 80%;
+}
+
+.profileInfo{
+    float: left;
+    width: 20%;
+    margin: 10px;
+    position: fixed;
+}
+.profileStatus{
+    float: right;
+    width: 70%;
+}
+.profileImage{
+    border-radius: 50%;
+    width: 200px;
+    height: 200px;
+    object-fit:scale-down;
+}
+.dialog{
+    padding: 10px;
+    text-align: center;
+}
+.closeButton{
+
+}

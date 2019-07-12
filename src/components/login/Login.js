@@ -56,8 +56,8 @@ class Login extends React.Component{
             this.auth.signInWithEmailAndPassword(this.state.email,this.state.password)
                 .then(()=> {
                     //
-                    this.setState({loadingBar:false})
-                    this.props.history.push("/home");
+                    this.setState({loadingBar:false});
+                    this.props.history.push("/");
                     //
                 }).catch(this.catchError);
         }

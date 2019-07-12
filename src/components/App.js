@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import firebase from "../fire"
-import Init from "./Init/Init"
+import Init from "./init/Init"
 import Loading from "./loading/Loading"
 import UserManagement from "./userManagement/userManagement"
 
@@ -11,27 +11,28 @@ class App extends React.Component{
         super(props);
 
         this.state={
-            pageState:"loading"
+            isLoggedIn:null
         };
 
         firebase.auth().onAuthStateChanged(user=>{
             //if signed in
             if(user){
-                console.log("userManagement uid:",user.uid);
-                this.setState({pageState:"home"})
+                console.log("user logged in");
+                console.log("user uid:",user.uid);
+                this.setState({isLoggedIn:true})
             //if not signed in
             }else {
-                console.log("not logged in");
-                this.setState({pageState:"login"})
+                console.log("user not logged in");
+                this.setState({isLoggedIn:false})
             }
         })
     }
 
     render() {
-        switch (this.state.pageState) {
-            case "login":
+        switch (this.state.isLoggedIn) {
+            case false:
                 return (<UserManagement/>);
-            case "home":
+            case true:
                 return (<Init/>);
             default:
                 return (<Loading/>)

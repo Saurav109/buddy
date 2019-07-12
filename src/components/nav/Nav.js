@@ -17,7 +17,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 class Nav extends React.Component{
     constructor(props) {
         super(props);
-        this.user=firebase.auth().currentUser
+        this.user=firebase.auth().currentUser;
         if(this.user!=null){
             this.state={
                 user:this.user.uid,
@@ -41,11 +41,10 @@ class Nav extends React.Component{
             <div>
                 <AppBar color="white" position="fixed">
                     <Toolbar >
-                        <Typography className="type" variant="button" ><Link to="/home">Home</Link></Typography>
+                        <Typography className="type" variant="button" ><Link to="/">Home</Link></Typography>
                         <Typography className="type" variant="button" ><Link to={"/profile"}>Profile</Link></Typography>
                         <Typography className="type" variant="button" ><Link to="/inbox">Inbox</Link></Typography>
                         <Typography style={{left:"0"}} className="type" variant="button" onClick={this.handleMenuClick}>Menu</Typography>
-
                     </Toolbar>
                 </AppBar>
                 <Menu
