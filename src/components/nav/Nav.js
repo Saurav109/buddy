@@ -13,6 +13,12 @@ import {Link} from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Avatar from "@material-ui/core/Avatar";
+import avatarIcon from "../../resources/avatarIcon.png";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import UploadImage from "../addPost/UploadImage";
+
 
 class Nav extends React.Component{
     constructor(props) {
@@ -22,7 +28,8 @@ class Nav extends React.Component{
             this.state={
                 user:this.user.uid,
                 dialog:false,
-                menuElement:null
+                menuElement:null,
+                profileImageUrl:null
             }
         }else {
             this.state={
@@ -30,9 +37,11 @@ class Nav extends React.Component{
             }
         }
         this.logout=this.logout.bind(this);
-        this.handleDialog=this.handleDialog.bind(this)
-        this.handleMenuClick=this.handleMenuClick.bind(this)
+        this.handleDialog=this.handleDialog.bind(this);
+        this.handleMenuClick=this.handleMenuClick.bind(this);
         this.handleMenuClose=this.handleMenuClose.bind(this)
+
+        this.imageLoader =new UploadImage();
     }
 
 
@@ -41,10 +50,10 @@ class Nav extends React.Component{
             <div>
                 <AppBar color="white" position="fixed">
                     <Toolbar >
-                        <Typography className="type" variant="button" ><Link to="/">Home</Link></Typography>
-                        <Typography className="type" variant="button" ><Link to={"/profile"}>Profile</Link></Typography>
-                        <Typography className="type" variant="button" ><Link to="/inbox">Inbox</Link></Typography>
-                        <Typography style={{left:"0"}} className="type" variant="button" onClick={this.handleMenuClick}>Menu</Typography>
+                        <Link className="type" to={"/profile"}><Avatar  sizes="10px" src={this.state.profileImageUrl || avatarIcon}/></Link>
+                        <Typography  variant="button" ><Link className="type" to="/">News Feed</Link></Typography>
+                        <Typography  variant="button" ><Link className="type" to="/inbox">Inbox</Link></Typography>
+                        <Typography className="type" style={{left:"0"}}  variant="button" onClick={this.handleMenuClick}>Menu</Typography>
                     </Toolbar>
                 </AppBar>
                 <Menu
@@ -73,6 +82,14 @@ class Nav extends React.Component{
             </div>
         )
 
+    }
+
+    componentDidMount() {
+
+        this.imageLoader.getImageUrl(
+            firebase.auth().currentUser.uid,
+            url=>{this.setState({profileImageUrl:url})}
+        )
     }
 
     logout(){

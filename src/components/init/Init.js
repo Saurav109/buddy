@@ -5,9 +5,9 @@ import Home from "../home/Home";
 import Inbox from "../inbox/Inbox";
 import Profile from "../profile/Profile";
 import NotFound from "../notFound/NotFound";
-import Main from "./Main"
 import SignUp from "../signUp/SignUp";
 import Login from "../login/Login";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 class Init extends React.Component{
     render() {
@@ -16,6 +16,7 @@ class Init extends React.Component{
         return(
             <Router>
                 <Nav/>
+                <ScrollToTop>
                 <Switch>
                     <Route path= "/" component={Home} exact/>
                     <Route path="/inbox" component={Inbox} exact/>
@@ -25,6 +26,7 @@ class Init extends React.Component{
                     <Route path="/login" component={Login} exact/>
                     <Route component={NotFound}/>
                 </Switch>
+                </ScrollToTop>
             </Router>
         )
     }

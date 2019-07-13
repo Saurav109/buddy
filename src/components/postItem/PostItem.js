@@ -15,7 +15,8 @@ class PostItem extends React.Component {
             show: false,
             profileImage: null,
             profileName: null,
-            profileImageUrl: null
+            profileImageUrl: null,
+            like:false
 
         };
 
@@ -36,23 +37,25 @@ class PostItem extends React.Component {
         return (
             this.props.image_url?
                 <ImagePostView
+                    like={this.state.like}
                     profile={this.props.profile}
                     show={this.state.show}
                     time={this.props.time}
                     likes={this.props.likes}
-                    performLike={this.props.performLike}
+                    performLike={this.performLike}
                     profileName={this.state.profileName}
                     text={this.props.text}
                     profileImageUrl={this.state.profileImageUrl}
                     fileUrl={this.state.fileUrl}
                     viewImage={this.viewImage}/> :
                 <TextPostView
+                    like={this.state.like}
                     profile={this.props.profile}
                     show={this.state.show}
                     time={this.props.time}
                     likes={this.props.likes}
                     profileImageUrl={this.state.profileImageUrl}
-                    performLike={this.props.performLike}
+                    performLike={this.performLike}
                     profileName={this.state.profileName}
                     text={this.props.text}
                     viewImage={this.viewImage}/>
@@ -65,6 +68,18 @@ class PostItem extends React.Component {
 
     componentDidMount() {
         this.database_ref.once("value", this.getData);
+        this.likedByRef.on("value",snap=>{
+            if(snap.val()){
+
+                this.setState({
+                    like:true
+                })
+            }else {
+                this.setState({
+                    like:false
+                })
+            }
+        });
         //
         let date = new Date(this.props.time_stamp);
         let localTime = date.getHours() + ":" + date.getMinutes() + " " + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();

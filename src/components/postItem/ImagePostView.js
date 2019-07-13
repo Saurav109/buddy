@@ -12,6 +12,16 @@ import DialogContent from "@material-ui/core/DialogContent";
 import Conversation from "../inbox/Conversation";
 
 class ImagePostView extends React.Component{
+    likeStyle={
+        color:"#0D4D90",
+        cursor: "pointer",
+        fontWeight:"bold"
+    };
+    unlikeStyle={
+        color:"#2B2B2B",
+        cursor: "pointer"
+    };
+
     render() {
         return(
             <Card className="postItem">
@@ -28,12 +38,13 @@ class ImagePostView extends React.Component{
                             title={
                                 <div>
                                     <Typography variant="h6">{this.props.text}</Typography>
+                                    <Typography display="inline">{this.props.likes?this.props.likes:0} {this.props.likes>1?"Likes":"Like"}</Typography>
                                     <Typography variant="subtitle1"><Link to={"/profile/" + this.props.profile}><b>
                                         {this.props.profileName ? this.props.profileName : "no name"}
                                     </b> </Link></Typography>
-                                    <Typography display="inline" style={{cursor: "pointer", color: "#3F6299"}}
-                                                onClick={this.props.performLike}><b> Like </b></Typography>
-                                    <Typography display="inline">all like:{this.props.likes?this.props.likes:0}</Typography>
+                                    <Typography display="inline"  style={this.props.like?this.likeStyle:this.unlikeStyle}
+                                                onClick={this.props.performLike}>Like</Typography>
+
                                 </div>}
 
                             subheader={this.props.time}>
