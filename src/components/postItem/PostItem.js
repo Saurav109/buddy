@@ -1,9 +1,9 @@
 import React from "react"
 import firebase from "firebase"
-import "../feed/index.css"
-import UploadImage from "../addPost/UploadImage"
-import ImagePostView from "./ImagePostView";
-import TextPostView from "./TextPostView";
+import Storage from "../storage/Storage"
+import ImagePostView from "../postView/ImagePostView";
+import TextPostView from "../postView/TextPostView";
+import Database from "../database/Database";
 
 
 class PostItem extends React.Component {
@@ -16,26 +16,23 @@ class PostItem extends React.Component {
             profileImage: null,
             profileName: null,
             profileImageUrl: null,
-            like:false
+            like: false
 
         };
 
-        this.database_ref = firebase.database().ref("/users/" + props.profile);
-        this.likedByRef = firebase.database().ref("feed/" + props.postId + "/likedBy/" + firebase.auth().currentUser.uid);
         this.performLike = this.performLike.bind(this);
         this.viewImage = this.viewImage.bind(this);
         this.getData = this.getData.bind(this);
         this.gotoProfile = this.gotoProfile.bind(this);
 
-        this.uploadHelper = new UploadImage();
-        if(!props.image_url){
-            console.log("this is what i am looking for")
-        }
+        this.uploadHelper = new Storage();
+        this.databaseHelper = new Database();
+
     }
 
     render() {
         return (
-            this.props.image_url?
+            this.props.image_url ?
                 <ImagePostView
                     like={this.state.like}
                     profile={this.props.profile}
@@ -67,20 +64,22 @@ class PostItem extends React.Component {
     }
 
     componentDidMount() {
-        this.database_ref.once("value", this.getData);
-        this.likedByRef.on("value",snap=>{
-            if(snap.val()){
+        //get user data
+        this.databaseHelper.getData("/users/" + this.props.profile, this.getData);
+        //get
+        this.databaseHelper.getData("feed/" + this.props.postId + "/likedBy/" + firebase.auth().currentUser.uid,
+            snap => {
+                if (snap.val()) {
+                    this.setState({
+                        like: true
+                    })
+                } else {
+                    this.setState({
+                        like: false
+                    })
+                }
+            });
 
-                this.setState({
-                    like:true
-                })
-            }else {
-                this.setState({
-                    like:false
-                })
-            }
-        });
-        //
         let date = new Date(this.props.time_stamp);
         let localTime = date.getHours() + ":" + date.getMinutes() + " " + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
         this.setState({
@@ -114,17 +113,7 @@ class PostItem extends React.Component {
     }
 
     performLike() {
-        let tmpRef = this.likedByRef;
-        this.likedByRef.once("value").then(snapshot => {
-            if (snapshot.val() == null) {
-                tmpRef.push(firebase.auth().currentUser.uid).set(true);
-                console.log("toggle true")
-            } else {
-                tmpRef.remove().then(() => {
-                    console.log("toggle false")
-                });
-            }
-        });
+        this.databaseHelper.addLike(this.props.postId);
     }
 }
 

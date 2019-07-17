@@ -7,3 +7,10 @@
 .maxlineText{
     padding: 13px;
 }
+
+.postItem{
+    width:60vh;
+    left:0;
+    right:0;
+    margin: 27px auto auto;
+}

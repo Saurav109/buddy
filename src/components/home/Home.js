@@ -3,7 +3,7 @@ import "./index.css"
 import Feed from "../feed/Feed"
 import {Redirect} from 'react-router-dom'
 import firebase from "../../fire";
-import AddPost from "../addPost/addPost";
+import AddPost from "../addPost/AddPost";
 
 
 class Home extends React.Component{

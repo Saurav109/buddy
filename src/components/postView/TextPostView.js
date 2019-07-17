@@ -9,6 +9,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import Button from "@material-ui/core/Button";
 import Conversation from "../inbox/Conversation";
+import "./index.css"
 
 class TextPostView extends React.Component{
 

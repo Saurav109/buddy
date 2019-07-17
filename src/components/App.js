@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import firebase from "../fire"
 import Init from "./init/Init"
 import Loading from "./loading/Loading"

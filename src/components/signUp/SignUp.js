@@ -1,28 +1,31 @@
 import React from "react"
 import SignUpView from "./SignUpView"
 import firebase from "firebase";
+import Database from "../database/Database";
 
-class SignUp extends React.Component{
+class SignUp extends React.Component {
 
-    constructor(p){
+    constructor(p) {
         super(p);
-        this.state={
-            name:"",
-            email:"",
-            password:"",
-            password2:"",
-            loadingBar:false,
-            showSnack:false,
-            snackText:""
+        this.state = {
+            name: "",
+            email: "",
+            password: "",
+            password2: "",
+            loadingBar: false,
+            showSnack: false,
+            snackText: ""
         };
 
-        this.auth=firebase.auth();
-        this.buttonClick=this.buttonClick.bind(this);
-        this.handleChange=this.handleChange.bind(this);
-        this.catchError=this.catchError.bind(this);
-        this.closeSnack=this.closeSnack.bind(this);
-        this.showSnack=this.showSnack.bind(this)
-        this.backToLogin=this.backToLogin.bind(this)
+        this.auth = firebase.auth();
+        this.buttonClick = this.buttonClick.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.catchError = this.catchError.bind(this);
+        this.closeSnack = this.closeSnack.bind(this);
+        this.showSnack = this.showSnack.bind(this);
+        this.backToLogin = this.backToLogin.bind(this)
+
+        this.databasehelper = new Database();
     }
 
     render() {
@@ -45,53 +48,59 @@ class SignUp extends React.Component{
 
     }
 
-    buttonClick(){
+    buttonClick() {
         //if userManagement not put all field
-        if(!this.state.email || !this.state.password){
+        if (!this.state.email || !this.state.password) {
             //
-            this.state.email ? this.showSnack("please write down your password!!"):
+            this.state.email ? this.showSnack("please write down your password!!") :
                 this.showSnack("please write down your email!!")
-        } else
-        {
-            if(this.state.password===this.state.password2){
+        } else {
+            if (this.state.password === this.state.password2) {
                 //start loading...
-                this.setState({loadingBar:true});
+                this.setState({loadingBar: true});
                 //start login
                 console.log("login start");
-                this.auth.createUserWithEmailAndPassword(this.state.email,this.state.password)
-                    .then(user=> {
-                        this.setState({loadingBar:false});
-                        console.log("new userManagement:",user.user.uid);
+                this.auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+                    .then(user => {
+                        this.setState({loadingBar: false});
+                        console.log("new userManagement:", user.user.uid);
 
                         this.makeAnewAccountDetails(user.user)
                     }).catch(this.catchError);
-            }else {
+            } else {
                 this.showSnack("password didn't match!")
             }
 
         }
     }
 
-    makeAnewAccountDetails(user){
-        console.log("save email",user.email);
+    makeAnewAccountDetails(user) {
+        console.log("save email", user.email);
 
-        const newUser={
-            name:this.state.name,
-            email:user.email,
-            uid:user.uid,
-            timeOfCreation:firebase.database.ServerValue.TIMESTAMP
+        const newUser = {
+            name: this.state.name,
+            email: user.email,
+            uid: user.uid,
+            timeOfCreation: firebase.database.ServerValue.TIMESTAMP
         };
-
-        firebase.database().ref("users").child(user.uid).set(newUser).then(
-            ()=>{
+        this.databasehelper.setValue(newUser, "/users/" + user.uid,
+            () => {
                 this.props.history.push("/");
                 console.log("Done creating new profile!")
-            }
-        )
+            }, () => {
+                console.log("Please try again");
+                this.showSnack("Please try again...")
+            });
+        // firebase.database().ref("users").child(user.uid).set(newUser).then(
+        //     () => {
+        //         this.props.history.push("/");
+        //         console.log("Done creating new profile!")
+        //     }
+        // )
     }
 
-    catchError(error){
-        this.setState({loadingBar:false});
+    catchError(error) {
+        this.setState({loadingBar: false});
 
         let errorCode = error.code;
         let errorMessage = error.message;
@@ -101,26 +110,27 @@ class SignUp extends React.Component{
         this.showSnack(errorMessage)
     }
 
-    handleChange(event){
+    handleChange(event) {
         this.setState({
-            [event.target.name]:event.target.value
+            [event.target.name]: event.target.value
         })
     }
 
-    backToLogin(){
+    backToLogin() {
         this.props.history.push("/login")
     }
 
-    showSnack(text){
+    showSnack(text) {
 
         this.setState({
-            showSnack:true,
-            snackText:text
+            showSnack: true,
+            snackText: text
         })
     }
-    closeSnack(){
+
+    closeSnack() {
         this.setState({
-            showSnack:false
+            showSnack: false
         })
     }
 }

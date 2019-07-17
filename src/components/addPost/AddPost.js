@@ -7,7 +7,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import Button from '@material-ui/core/Button'
 import {TextField} from "@material-ui/core";
-import UploadImage from "./UploadImage";
+import Storage from "../storage/Storage";
 
 class AddPost extends React.Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class AddPost extends React.Component {
         this.showSnack = this.showSnack.bind(this);
         this.closeSnack = this.closeSnack.bind(this);
         //
-        this.uploadHelper = new UploadImage();
+        this.uploadHelper = new Storage();
     }
 
     render() {
@@ -153,51 +153,9 @@ class AddPost extends React.Component {
 
     }
 
-    //
-    // uploadPost(imageName, text, file,doneUpload,uploadPercent){
-    //     let uploadTask = this.storageRef.child(imageName).put(this.state.file[0]);
-    //
-    //     uploadTask.on('state_changed', function(snapshot){
-    //         let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //         console.log('AddPost is ' + progress + '% done');
-    //         uploadPercent(progress)
-    //         switch (snapshot.state) {
-    //             case firebase.storage.TaskState.PAUSED: // or 'paused'
-    //                 console.log('AddPost is paused');
-    //                 break;
-    //             case firebase.storage.TaskState.RUNNING: // or 'running'
-    //                 console.log('AddPost is running');
-    //                 break;
-    //
-    //         }
-    //     }, function(error) {
-    //         console.log("error",error);
-    //         doneUpload()
-    //     }, function() {
-    //
-    //         uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-    //             // console.log('File available at', downloadURL);
-    //             let value ={
-    //                 text:text,
-    //                 time_stamp: firebase.database.ServerValue.TIMESTAMP,
-    //                 fileUrl:imageName,
-    //                 post_owner: firebase.auth().currentUser.uid
-    //             };
-    //             firebase.database().ref("/feed").push().set(value).then(()=>{
-    //
-    //                 firebase.database().ref("/users/"+firebase.auth().currentUser.uid+"/posts/").push().set(value).then(()=>{
-    //                     doneUpload()
-    //                 })
-    //             })
-    //
-    //         });
-    //     });
-    // }
-
-
     fileChange(file) {
-        console.log("file:", file[0])
-        this.setState({file: file})
+        console.log("file:", file[0]);
+        this.setState({file: file});
 
         const reader = new FileReader();
 
@@ -205,7 +163,7 @@ class AddPost extends React.Component {
             this.setState({
                 fileUrl: reader.result
             })
-        }
+        };
         if (file[0]) {
             reader.readAsDataURL(file[0]);
             this.setState({

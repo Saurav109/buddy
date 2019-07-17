@@ -3,7 +3,8 @@ import "./index.css"
 import firebase from "../../fire";
 import NotFound from "../notFound/NotFound";
 import ProfileView from "./ProfileView";
-import UploadImage from "../addPost/UploadImage"
+import Storage from "../storage/Storage"
+import Database from "../database/Database";
 
 class Profile extends React.Component{
     constructor(props) {
@@ -22,7 +23,6 @@ class Profile extends React.Component{
             fileUrl:null            //local image file url
         };
 
-        this.uploadHelper=new UploadImage();
         //if url gives uid of user
         if(props.match.params.id){
             this.state.uid=props.match.params.id
@@ -31,8 +31,6 @@ class Profile extends React.Component{
         else {
             this.state.uid=firebase.auth().currentUser.uid
         }
-        //
-        this.profileRef=firebase.database().ref("users/"+this.state.uid);
         //all function
         this.getData=this.getData.bind(this);
         this.handleDialog=this.handleDialog.bind(this);
@@ -41,12 +39,14 @@ class Profile extends React.Component{
         this.doneUpload=this.doneUpload.bind(this);
         this.textInputChange=this.textInputChange.bind(this);
         this.updateUploadPercent=this.updateUploadPercent.bind(this);
-
         this.setImageUrl=this.setImageUrl.bind(this);
+
+        this.uploadHelper=new Storage();
+        this.databaseHelper=new Database();
     }
 
     componentDidMount() {
-        this.profileRef.on("value",this.getData)
+        this.databaseHelper.getData("/users/"+this.state.uid,this.getData)
     }
 
     getData(snapshot){
@@ -56,7 +56,6 @@ class Profile extends React.Component{
                 name:snapshot.val().name,
                 bio:snapshot.val().bio
             });
-            // this.setImageUrl(this.state.uid)  //profile picture name always same as user uid
             this.uploadHelper.getImageUrl(this.state.uid,this.setImageUrl) //profile picture name always same as user uid
 
         }else {                 //if profile don't exist
@@ -66,28 +65,30 @@ class Profile extends React.Component{
         }
     }
 
-
     setImageUrl(url) {
         this.setState({
             profileImageUrl:url
         })
     }
 
-
     textInputChange(event){
         const text=event.target.value;
         this.setState({[event.target.name]:text})
     }
 
-
     addNewPost(){
         console.log("in the add new");
-        if(this.state.file[0]){
+        if(this.state.file){
             this.setState({loadingBar:true});
             this.uploadHelper.uploadPicture(this.state.uid,this.state.file[0],this.updateUploadPercent,this.doneUpload)
         }
+        if(this.state.tmpName){
+            this.databaseHelper.setValue(this.state.tmpName,"/users/"+this.state.uid+"/name/",this.doneUpload(true))
+        }
+        if (this.state.tmpBio) {
+            this.databaseHelper.setValue(this.state.tmpBio,"/users/"+this.state.uid+"/bio/",this.doneUpload(true))
+        }
     }
-
 
     updateUploadPercent(percent){
         this.setState({uploadPercent:percent})

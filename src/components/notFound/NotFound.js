@@ -4,7 +4,7 @@ import "./index.css"
 class NotFound extends React.Component{
     render() {
         return(
-            <div className="myDiv">
+            <div className="pageNotFound">
                 <h1>{this.props.title||"Page not found"}</h1>
             </div>
         )

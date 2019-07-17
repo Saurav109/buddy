@@ -1,6 +1,6 @@
 import firebase from "../../fire";
 
-class UploadImage {
+class Storage {
     constructor() {
         this.storageRef = firebase.storage().ref();
     }
@@ -36,4 +36,4 @@ class UploadImage {
 
 }
 
-export default UploadImage
+export default Storage

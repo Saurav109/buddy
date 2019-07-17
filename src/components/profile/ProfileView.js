@@ -6,7 +6,6 @@ import Feed from "../feed/Feed";
 import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import {LinearProgress} from "@material-ui/core";
 
@@ -35,17 +34,19 @@ class ProfileView extends React.Component{
 
                     <DialogContent>
                         <div className="dialog">
-                            <p  onClick={this.props.handleDialog} >close</p>
+                            <Button  onClick={this.props.handleDialog} >cancel</Button>
                             <h3 >Update Profile</h3>
-                            <img alt="profile picture" className="profileImage"
-                                 onClick={this.props.handleDialog||null}
-                                 src={this.props.profileImageUrl || avatarIcon}/>
+
+                            {this.props.fileUrl ?  <img src={this.props.fileUrl} className="profileImage"/>:
+                                <img alt="profile picture" className="profileImage"
+                                     src={this.props.profileImageUrl || avatarIcon}/>}
+
                             <br/>
                             <TextField value={this.props.tmpName} name="tmpName" onChange={this.props.textInputChange} variant="outlined" placeholder="Name"/>
                             <br/>
                             <TextField value={this.props.tmpBio} name="tmpBio" onChange={this.props.textInputChange} variant="outlined" placeholder="Your bio"/>
                             <br/>
-                            {this.props.fileUrl? <img src={this.props.fileUrl} className="profileImage"/>:null}
+
                             <div>
                                 <input
                                     accept="image/*"
