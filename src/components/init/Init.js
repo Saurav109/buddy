@@ -7,6 +7,7 @@ import Profile from "../profile/Profile";
 import NotFound from "../notFound/NotFound";
 import SignUp from "../signUp/SignUp";
 import Login from "../login/Login";
+import SendText from "../sendText/SendText"
 import ScrollToTop from "../ScrollToTop/ScrollToTop";
 
 class Init extends React.Component{
@@ -20,6 +21,7 @@ class Init extends React.Component{
                 <Switch>
                     <Route path= "/" component={Home} exact/>
                     <Route path="/inbox" component={Inbox} exact/>
+                    <Route path="/inbox/:id" component={SendText} exact/>
                     <Route path="/profile/:id" component={Profile} exact/>
                     <Route path="/profile" component={Profile} exact/>
                     <Route path="/signUp" component={SignUp} exact/>

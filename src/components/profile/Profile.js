@@ -40,6 +40,7 @@ class Profile extends React.Component{
         this.textInputChange=this.textInputChange.bind(this);
         this.updateUploadPercent=this.updateUploadPercent.bind(this);
         this.setImageUrl=this.setImageUrl.bind(this);
+        this.sendText=this.sendText.bind(this);
 
         this.uploadHelper=new Storage();
         this.databaseHelper=new Database();
@@ -109,6 +110,7 @@ class Profile extends React.Component{
         return(
             this.state.exist?
                 <ProfileView
+                    sendText={this.sendText}
                     bio={this.state.bio}
                     name={this.state.name}
                     profileImageUrl={this.state.profileImageUrl}
@@ -125,6 +127,9 @@ class Profile extends React.Component{
                     uploadPercent={this.state.uploadPercent}/>:
                 <NotFound title="invalid profile"/>
         )
+    }
+    sendText(){
+        this.databaseHelper.openNewConversation(this.state.uid,this.props)
     }
 
     //other react variable handler code________________________________

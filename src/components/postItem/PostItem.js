@@ -5,7 +5,6 @@ import ImagePostView from "../postView/ImagePostView";
 import TextPostView from "../postView/TextPostView";
 import Database from "../database/Database";
 
-
 class PostItem extends React.Component {
     constructor(props) {
         super(props);

@@ -21,6 +21,8 @@ class ProfileView extends React.Component{
                              src={this.props.profileImageUrl || avatarIcon}/>
                         <Typography variant="h4">{this.props.name}</Typography>
                         <Typography variant="subtitle2">{this.props.bio}</Typography>
+                        {this.props.handleDialog?null:<Button onClick={this.props.sendText} variant="outlined">message</Button>}
+
                     </div>
                     <div className="profileStatus">
                         <Feed location={this.props.location}/>

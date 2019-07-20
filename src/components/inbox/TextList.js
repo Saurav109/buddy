@@ -7,12 +7,6 @@ import avatarIcon from "../../resources/avatarIcon.png";
 import Avatar from "@material-ui/core/Avatar";
 
 class TextList extends React.Component{
-    constructor(props) {
-        super(props);
-
-    }
-
-
     render() {
         return(
             <List>

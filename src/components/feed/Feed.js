@@ -26,21 +26,23 @@ class Feed extends React.Component {
                 </div>
                 }
 
-                {this.state.content_list.map(snapshot => {
-                    return (
-                        <PostItem text={snapshot.val.text}
-                                  image_url={snapshot.val.image_url}
-                                  time_stamp={snapshot.val.time_stamp}
-                                  child_key={snapshot.key}
-                                  show={this.props.show}
-                                  profile={snapshot.val.post_owner}
-                                  postId={snapshot.key}
-                                  likes={snapshot.val.likes}
-                                  key={snapshot.key}
-                                  history={this.props.history}
-                        />
-                    )
-                })}
+                {
+                    this.state.content_list.map(snapshot => {
+                        return (
+                            <PostItem text={snapshot.val.text}
+                                      image_url={snapshot.val.image_url}
+                                      time_stamp={snapshot.val.time_stamp}
+                                      child_key={snapshot.key}
+                                      show={this.props.show}
+                                      profile={snapshot.val.post_owner}
+                                      postId={snapshot.key}
+                                      likes={snapshot.val.likes}
+                                      key={snapshot.key}
+                                      history={this.props.history}
+                            />
+                        )
+                    })
+                }
             </div>
         )
     }
