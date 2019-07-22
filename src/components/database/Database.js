@@ -1,38 +1,26 @@
 import firebase from "../../fire";
 
 class Database {
+    static CURRENT_USER_UID;
+
     constructor() {
         this.dataRef = firebase.database();
+        this.uid=firebase.auth().currentUser;
+        if(this.uid){
+            Database.CURRENT_USER_UID=this.uid.uid;
+        }
     }
 
     getData(node, onValueChange) {
         this.dataRef.ref(node).on("value", onValueChange)
     }
-    getAllText(node, onValueChange) {
-        this.dataRef.ref(node).on("child_added", onValueChange)
-    }
 
+    getAllText(node, onValueChange) {
+        this.dataRef.ref(node).on("value", onValueChange)
+    }
 
     setValue(value, node, successFunction, errorFunction) {
         this.dataRef.ref(node).set(value).then(successFunction).catch(errorFunction);
-    }
-
-    addLike(postId) {
-        let uid = firebase.auth().currentUser.uid;
-        let node = "feed/" + postId + "/likedBy/" + uid;
-        let likeRef = this.dataRef.ref(node);
-        //
-        likeRef.once("value",
-            snapshot => {
-                if (snapshot.val() == null) {
-                    likeRef.push(uid).set(true);
-                    console.log("toggle true")
-                } else {
-                    likeRef.remove().then(() => {
-                        console.log("toggle false")
-                    });
-                }
-            })
     }
 
     getAllPost(uid, onValueChange) {
@@ -99,6 +87,27 @@ class Database {
         })
     }
 
+    addLike(postId) {
+        let uid = firebase.auth().currentUser.uid;
+        let node = "feed/" + postId + "/likedBy/" + uid;
+        let likeRef = this.dataRef.ref(node);
+        //
+        likeRef.once("value",
+            snapshot => {
+                if (snapshot.val() == null) {
+                    likeRef.push(uid).set(true);
+                    console.log("toggle true")
+                } else {
+                    likeRef.remove().then(() => {
+                        console.log("toggle false")
+                    });
+                }
+            })
+    }
+
+    static logout(success){
+        firebase.auth().signOut().then(success);
+    }
 }
 
 export default Database

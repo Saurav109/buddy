@@ -1,7 +1,7 @@
-.type{
+.navigationItem{
     padding: 13px;
 }
-.type:hover{
+.navigationItem:hover{
     background: gray;
     cursor: pointer;
 }

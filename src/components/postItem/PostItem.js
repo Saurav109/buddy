@@ -11,11 +11,11 @@ class PostItem extends React.Component {
         this.state = {
             fileUrl: "/",
             time: "",
-            show: false,
+            showFullscreen: false,
             profileImage: null,
-            profileName: null,
+            userName: null,
             profileImageUrl: null,
-            like: false
+            isLiked: false
 
         };
 
@@ -33,26 +33,26 @@ class PostItem extends React.Component {
         return (
             this.props.image_url ?
                 <ImagePostView
-                    like={this.state.like}
-                    profile={this.props.profile}
-                    show={this.state.show}
+                    isLiked={this.state.isLiked}
+                    userUid={this.props.userUid}
+                    showFullscreen={this.state.showFullscreen}
                     time={this.props.time}
                     likes={this.props.likes}
                     performLike={this.performLike}
-                    profileName={this.state.profileName}
+                    userName={this.state.userName}
                     text={this.props.text}
                     profileImageUrl={this.state.profileImageUrl}
                     fileUrl={this.state.fileUrl}
                     viewImage={this.viewImage}/> :
                 <TextPostView
-                    like={this.state.like}
-                    profile={this.props.profile}
-                    show={this.state.show}
+                    isLiked={this.state.isLiked}
+                    userUid={this.props.userUid}
+                    showfullscreen={this.state.showFullscreenw}
                     time={this.props.time}
                     likes={this.props.likes}
                     profileImageUrl={this.state.profileImageUrl}
                     performLike={this.performLike}
-                    profileName={this.state.profileName}
+                    userName={this.state.userName}
                     text={this.props.text}
                     viewImage={this.viewImage}/>
         )
@@ -64,39 +64,42 @@ class PostItem extends React.Component {
 
     componentDidMount() {
         //get user data
-        this.databaseHelper.getData("/users/" + this.props.profile, this.getData);
-        //get
+        this.databaseHelper.getData("/users/" + this.props.userUid, this.getData);
+        //check if current user liked
         this.databaseHelper.getData("feed/" + this.props.postId + "/likedBy/" + firebase.auth().currentUser.uid,
             snap => {
                 if (snap.val()) {
                     this.setState({
-                        like: true
+                        isLiked: true
                     })
                 } else {
                     this.setState({
-                        like: false
+                        isLiked: false
                     })
                 }
             });
-
+        //set time from timeStamp
         let date = new Date(this.props.time_stamp);
         let localTime = date.getHours() + ":" + date.getMinutes() + " " + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear();
         this.setState({
             time: localTime
-        })
+        });
+
     }
 
     getData(snapshot) {
         if (snapshot.val()) {
             this.setState({
                 profileImage: snapshot.val().profilePicture ? snapshot.val().profilePicture : null,
-                profileName: snapshot.val().name ? snapshot.val().name : null
+                userName: snapshot.val().name ? snapshot.val().name : null
             });
 
-            this.uploadHelper.getImageUrl(this.props.profile,
+            //set avatar image
+            this.uploadHelper.getImageUrl(this.props.userUid,
                 (url) => {
                     this.setState({profileImageUrl: url})
                 });
+            //set post image
             this.uploadHelper.getImageUrl(this.props.image_url,
                 (url) => {
                     this.setState({fileUrl: url});
@@ -107,7 +110,7 @@ class PostItem extends React.Component {
 
     viewImage() {
         this.setState({
-            show: !this.state.show
+            showFullscreen: !this.state.showFullscreen
         })
     }
 

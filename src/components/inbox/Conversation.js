@@ -1,16 +1,10 @@
 import React from "react"
 import "./index.css"
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
 import List from "@material-ui/core/List";
 import {TextField} from "@material-ui/core";
-import Typography from "@material-ui/core/Typography";
 import Database from "../database/Database";
-import Avatar from "@material-ui/core/Avatar";
-import avatarIcon from "../../resources/avatarIcon.png";
 import Text from "./Text";
 import * as firebase from "firebase";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import NotFound from "../notFound/NotFound";
 
 class Conversation extends React.Component {
@@ -27,15 +21,20 @@ class Conversation extends React.Component {
         this.databaseHelper = new Database();
     }
 
-    componentDidMount() {
-        // this.databaseHelper.getData("/conversation/"+this.props.convo,this.storeData)
-        this.databaseHelper.getAllText("/conversation/" + this.props.convo, this.storeData)
+    componentWillReceiveProps(nextProps, nextContext) {
+        console.log("clicking",nextProps);
+
+        this.databaseHelper.getAllText("/conversation/" + nextProps.convo, this.storeData)
     }
+
 
     render() {
         if (this.props.convo) {
             return (
-                <div style={{width: "100%"}}>
+                <div className="convo">
+                    <br/>
+                    <br/>
+                    <br/>
                     <List>
 
                         {
@@ -48,6 +47,7 @@ class Conversation extends React.Component {
                     </List>
 
                     <TextField fullWidth={true}
+                               className="convoTextField"
                                value={this.state.text}
                                onChange={this.handleChange}
                                onKeyPress={this.handleSubmit}
@@ -68,16 +68,14 @@ class Conversation extends React.Component {
     }
 
     storeData(snapshot) {
-        console.log("all data", snapshot.val());
-
-        this.setState(prevState => {
-            let newAllText = prevState.allText;
-            newAllText.push({val: snapshot.val(), key: snapshot.key});
-            return {
-                allText: newAllText
-            }
+        let tmpAllText=[];
+        snapshot.forEach(val=>{
+            tmpAllText.push({val: val.val(), key: val.key})
         });
-        console.log("local", this.state.allText)
+
+        this.setState({
+            allText:tmpAllText
+        })
 
     }
 

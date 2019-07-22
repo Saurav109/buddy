@@ -1,6 +1,7 @@
 import firebase from "../../fire";
 
 class Storage {
+
     constructor() {
         this.storageRef = firebase.storage().ref();
     }
@@ -32,7 +33,6 @@ class Storage {
             setImageUrl(image_url);
         });
     }
-
 
 }
 

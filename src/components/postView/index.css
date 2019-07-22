@@ -9,8 +9,19 @@
 }
 
 .postItem{
-    width:60vh;
+    width:37%;
+    min-width: 600px;
     left:0;
     right:0;
     margin: 27px auto auto;
+}
+@media only screen and (max-width: 420px) {
+    .postItem{
+        width:100%;
+        min-width: 100%;
+        left:0;
+        right:0;
+        margin: auto;
+        background-color: #00e2d7;
+    }
 }

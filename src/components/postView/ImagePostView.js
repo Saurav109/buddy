@@ -40,10 +40,10 @@ class ImagePostView extends React.Component{
                                 <div>
                                     <Typography variant="h6">{this.props.text}</Typography>
                                     <Typography display="inline">{this.props.likes?this.props.likes:0} {this.props.likes>1?"Likes":"Like"}</Typography>
-                                    <Typography variant="subtitle1"><Link to={"/profile/" + this.props.profile}><b>
-                                        {this.props.profileName ? this.props.profileName : "no name"}
+                                    <Typography variant="subtitle1"><Link to={"/profile/" + this.props.userUid}><b>
+                                        {this.props.userName ? this.props.userName : "no name"}
                                     </b> </Link></Typography>
-                                    <Typography display="inline"  style={this.props.like?this.likeStyle:this.unlikeStyle}
+                                    <Typography display="inline"  style={this.props.isLiked?this.likeStyle:this.unlikeStyle}
                                                 onClick={this.props.performLike}>Like</Typography>
 
                                 </div>}
@@ -56,7 +56,7 @@ class ImagePostView extends React.Component{
                 <Dialog
                     fullScreen={true}
                     fullWidth={true}
-                    open={this.props.show} onClose={this.props.viewImage}>
+                    open={this.props.showFullscreen} onClose={this.props.viewImage}>
                     <DialogContent>
                         <div style={{width:"70%",float:"left",position:"fixed",height:"100%"}}>
                             <div  style={{ position:"absolute", width:"100%",height:"100%", left:"0",right:"0",top:"0",bottom:"0",margin:"auto"}}>

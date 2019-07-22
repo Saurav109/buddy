@@ -34,3 +34,33 @@
     padding: 10px;
     text-align: center;
 }
+@media only screen and (max-width: 900px) {
+    .profileInfo{
+        float: none;
+        width: 100%;
+        position: unset;
+        margin-top: 100px;
+        text-align: center;
+        margin-bottom: 100px;
+    }
+    .profileStatus{
+        float: none;
+        width: 100%;
+        margin-top: 0;
+
+    }
+    .profileView{
+        position: center;
+        display: inline-block;
+        width: 100%;
+        top:0;
+    }
+    .profileImage{
+        border-radius: 0;
+        width: 100%;
+        min-width: 100%;
+        min-height: 300px;
+        object-fit:scale-down;
+
+    }
+}

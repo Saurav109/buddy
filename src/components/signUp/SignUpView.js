@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
+import icon from "../../resources/icon.png";
 
 
 class SignUpView extends React.Component{
@@ -16,6 +17,7 @@ class SignUpView extends React.Component{
                 <div className="card">
                     <Paper style={{padding:"23px"}}
                     elevation={2}>
+                        <img src={icon} height="100px" width="100px"/>
                         <Typography
                             variant="h4">
                             Sign Up

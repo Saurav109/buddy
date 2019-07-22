@@ -32,12 +32,9 @@ class Feed extends React.Component {
                             <PostItem text={snapshot.val.text}
                                       image_url={snapshot.val.image_url}
                                       time_stamp={snapshot.val.time_stamp}
-                                      child_key={snapshot.key}
-                                      show={this.props.show}
-                                      profile={snapshot.val.post_owner}
+                                      userUid={snapshot.val.post_owner}
                                       postId={snapshot.key}
                                       likes={snapshot.val.likes}
-                                      key={snapshot.key}
                                       history={this.props.history}
                             />
                         )

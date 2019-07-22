@@ -36,10 +36,10 @@ class TextPostView extends React.Component{
                         title={
                             <div>
                                 <Typography display="inline">{this.props.likes?this.props.likes:0} {this.props.likes>1?"Likes":"Like"}</Typography>
-                                <Typography variant="subtitle1"><Link to={"/profile/" + this.props.profile}><b>
-                                    {this.props.profileName ? this.props.profileName : "no name"}
+                                <Typography variant="subtitle1"><Link to={"/profile/" + this.props.userUid}><b>
+                                    {this.props.userName ? this.props.userName : "no name"}
                                 </b> </Link></Typography>
-                                <Typography display="inline"  style={this.props.like?this.likeStyle:this.unlikeStyle}
+                                <Typography display="inline"  style={this.props.isLiked?this.likeStyle:this.unlikeStyle}
                                             onClick={this.props.performLike}>Like</Typography>
 
                             </div>}
@@ -49,7 +49,7 @@ class TextPostView extends React.Component{
                 <Dialog
                     fullScreen={true}
                     fullWidth={true}
-                    open={this.props.show} onClose={this.props.viewImage}>
+                    open={this.props.showfullscreen} onClose={this.props.viewImage}>
                     <DialogContent>
                         <Button size="medium" variant="text" fullWidth="false" onClick={this.props.viewImage}>Close</Button>
                         <div style={{padding:"23px",marginTop:"23px", position:"sticky",top:"0",display:"block"}}>
