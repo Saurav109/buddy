@@ -8,14 +8,14 @@ import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
 import icon from "../../resources/icon.png"
 
-class LoginView extends React.Component{
+class LoginView extends React.Component {
 
     render() {
-        return(
-            <div className="card">
-                <Paper style={{padding:"23px"}}
-                elevation={2}>
-                    <img src={icon} height="100px" width="100px"/>
+        return (
+            <div className="loginCard">
+                <Paper className="loginPaper"
+                       elevation={2}>
+                    <img src={icon}/>
                     <Typography
                         variant="h4">
                         Login
@@ -25,14 +25,14 @@ class LoginView extends React.Component{
                     </Typography>
                     <br/><br/>
                     <TextField
-                        style={{width:"100%"}}
+                        style={{width: "100%"}}
                         variant="outlined"
                         name="email"
                         className="textInput"
                         placeholder="Email"
-                        onChange={this.props.handleChange} /><br/><br/>
+                        onChange={this.props.handleChange}/><br/><br/>
                     <TextField
-                        style={{width:"100%"}}
+                        style={{width: "100%"}}
                         variant="outlined"
                         type="password"
                         name="password"
@@ -59,7 +59,7 @@ class LoginView extends React.Component{
                     </Button>
 
                 </Paper>
-                {this.props.loadingBar && <LinearProgress style={{height:"13px"}}/>}
+                {this.props.loadingBar && <LinearProgress style={{height: "13px"}}/>}
                 <Snackbar
                     anchorOrigin={{vertical: 'bottom', horizontal: 'center',}}
                     open={this.props.showSnack}
@@ -67,7 +67,7 @@ class LoginView extends React.Component{
                     onClose={this.props.closeSnack}>
 
                     <SnackbarContent
-                        style={{background:"#e20e00",fontSize:"17px"}}
+                        style={{background: "#e20e00", fontSize: "17px"}}
                         message={<span id="message-id">{this.props.snackText}</span>}/>
                 </Snackbar>
             </div>

@@ -17,7 +17,6 @@
     bottom: 0;
     padding: 13px;
     background-color: white;
-
 }
 
 @media only screen and (max-width: 420px) {
@@ -28,9 +27,21 @@
         float: left;
         position: fixed;
         height: 100%;
-        min-width: 75px;
+        min-width: 17%;
+        width: 17%;
     }
     .convo{
-        margin: 20px;
+        width: 90%;
+        max-width: 83%;
+        min-width: 83%;
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    .convoTextField{
+        position: fixed;
+        bottom: 0;
+        padding: 0;
+        background-color: white;
     }
 }

@@ -1,5 +1,5 @@
 
-.card{
+.loginCard{
     position: absolute;
     top:0;
     bottom: 0;
@@ -8,4 +8,31 @@
     margin: auto;
     width: 50vh;
     padding-top: 20vh;
+}
+.loginPaper{
+    padding: 23px;
+}
+.loginCard img{
+    height: 100px;
+    width: 100px;
+}
+
+@media only screen and (max-width: 420px) {
+    .loginCard{
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 95%;
+        padding: auto;
+    }
+    .loginPaper{
+        padding: 23px;
+
+    }
+    .loginCard img{
+        height: 100px;
+        width: 100px;
+    }
 }

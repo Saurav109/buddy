@@ -14,3 +14,42 @@
     width: 50vh;
     padding-top: 20vh;
 }
+
+
+.signCard{
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 50vh;
+    padding-top: 20vh;
+}
+.signPaper{
+    padding: 23px;
+}
+.signCard img{
+    height: 100px;
+    width: 100px;
+}
+
+@media only screen and (max-width: 420px) {
+    .signCard{
+        position: absolute;
+        top:0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 95%;
+        padding: auto;
+    }
+    .signPaper{
+        padding: 23px;
+
+    }
+    .signCard img{
+        height: 100px;
+        width: 100px;
+    }
+}
